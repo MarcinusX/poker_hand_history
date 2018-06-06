@@ -9,13 +9,22 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       title: 'Flutter Demo',
       theme: new ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
       ),
-      home: new Scaffold(
-        body: new CardPicker(),
+      home: new Builder(
+        builder: (context) =>
+        new Scaffold(
+          body: new Container(),
+          floatingActionButtonLocation: FloatingActionButtonLocation
+              .centerFloat,
+          floatingActionButton: new FloatingActionButton(
+            onPressed: () =>
+                Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => new CardPicker(),
+                )),
+          ),
+        ),
       ),
     );
   }
 }
-
-
