@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:poker_hand_history/card_view.dart';
 
 class CardPicker extends StatefulWidget {
   @override
@@ -36,13 +37,19 @@ class _CardPickerState extends State<CardPicker>
   }
 
   List<Widget> _buildStackChildren() {
-    List<Widget> cards = [
-      _buildLeftCard(),
-      _buildRightCard(),
-    ];
+    List<Widget> cards;
     if (_animationController.value < 0.5) {
-      cards = cards.reversed.toList();
+      cards = [
+        _buildRightCard(),
+        _buildLeftCard(),
+      ];
+    } else {
+      cards = [
+        _buildLeftCard(),
+        _buildRightCard(),
+      ];
     }
+
     return cards;
   }
 
@@ -60,9 +67,10 @@ class _CardPickerState extends State<CardPicker>
               1 - 0.2 * _animationController.value,
             ),
           child: new CardView(
-            onTap: () {
-              _animationController.reverse();
-            },
+            onTap: () => _animationController.reverse(),
+            onRankPicked: (rank) => print(rank),
+            enabled: _animationController.isDismissed,
+            title: "left",
           ),
         ),
       ),
@@ -83,36 +91,10 @@ class _CardPickerState extends State<CardPicker>
               1 - 0.2 * (1 - _animationController.value),
             ),
           child: new CardView(
-            onTap: () {
-              _animationController.forward();
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CardView extends StatefulWidget {
-  final Function onTap;
-
-  const CardView({Key key, this.onTap}) : super(key: key);
-
-  @override
-  _CardViewState createState() => _CardViewState();
-}
-
-class _CardViewState extends State<CardView> {
-  @override
-  Widget build(BuildContext context) {
-    return new GestureDetector(
-      onTap: widget.onTap,
-      child: Container(
-        decoration: new BoxDecoration(
-          color: const Color(0xFFFFFFCC),
-          borderRadius: new BorderRadius.circular(16.0),
-          border: new Border.all(
-            color: const Color(0xFFEEEECC),
+            onTap: () => _animationController.forward(),
+            onRankPicked: (rank) => print(rank),
+            enabled: _animationController.isCompleted,
+            title: "right",
           ),
         ),
       ),
