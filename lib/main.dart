@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:poker_hand_history/card_picker.dart';
+import 'package:poker_hand_history/cut_corners_border.dart';
+import 'package:poker_hand_history/main_scaffold.dart';
 
 void main() => runApp(new MyApp());
 
@@ -9,22 +10,15 @@ class MyApp extends StatelessWidget {
     return new MaterialApp(
       title: 'Flutter Demo',
       theme: new ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: new Builder(
-        builder: (context) =>
-        new Scaffold(
-          body: new Container(),
-          floatingActionButtonLocation: FloatingActionButtonLocation
-              .centerFloat,
-          floatingActionButton: new FloatingActionButton(
-            onPressed: () =>
-                Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) => new CardPicker(),
-                )),
+          inputDecorationTheme: InputDecorationTheme(
+            border: new CutCornersBorder(),
           ),
-        ),
+          scaffoldBackgroundColor: Colors.green[200],
+          primaryColor: Colors.green[600],
+          accentColor: Colors.deepOrange[500],
+          brightness: Brightness.light
       ),
+      home: new MainScaffold(),
     );
   }
 }

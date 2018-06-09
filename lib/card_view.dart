@@ -1,18 +1,20 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:poker_hand_history/card.dart';
+import 'package:poker_hand_history/suit_widget.dart';
 
 class CardView extends StatefulWidget {
-  final String title;
   final Function onTap;
-  final Function(Rank) onRankPicked;
+  final Function(PlayingCard) onCardPicked;
+  final bool alignLeft;
   final bool enabled;
 
-  const CardView(
-      {Key key,
-      this.onTap,
-      this.onRankPicked,
-      this.enabled = false,
-      this.title})
+  const CardView({Key key,
+    this.onTap,
+    this.onCardPicked,
+    this.enabled = false,
+    this.alignLeft = true})
       : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class CardView extends StatefulWidget {
 
 class _CardViewState extends State<CardView> {
   Rank rank;
+  Suit suit;
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +49,95 @@ class _CardViewState extends State<CardView> {
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
           child: ranks(),
         ),
-        _chosenRank(),
-        new Text(widget.title),
+        new Positioned(
+          left: 0.0,
+          top: 0.0,
+          child: _chosenCard(),
+        ),
+        new Positioned(
+          right: 0.0,
+          bottom: 0.0,
+          child: new Transform.rotate(
+            angle: math.pi,
+            child: _chosenCard(),
+          ),
+        ),
+        new Align(alignment: Alignment.center, child: suits()),
       ],
     );
   }
 
-  Widget _chosenRank() {
-    if (this.rank == null) {
-      return new Container();
-    } else {
-      return new Text(rankToSymbol(rank));
+  Widget _chosenCard() {
+    Widget rankWidget = new Container();
+    Widget suitWidget = new Container();
+    Color color = (this.suit != null &&
+        (this.suit == Suit.HEARTS || this.suit == Suit.DIAMONDS))
+        ? Colors.red
+        : Colors.black;
+    if (this.rank != null) {
+      rankWidget = new Text(
+        rankToSymbol(rank),
+        style: Theme
+            .of(context)
+            .textTheme
+            .display2
+            .copyWith(color: color),
+      );
     }
+    if (this.suit != null) {
+      suitWidget = new SuitWidget(
+        suit: this.suit,
+        height: 26.0,
+        width: 26.0,
+      );
+    }
+
+    return new Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Column(
+        children: <Widget>[
+          rankWidget,
+          suitWidget,
+        ],
+      ),
+    );
+  }
+
+  Widget suits() {
+    if (!(this.rank != null && this.suit == null)) {
+      return new Container();
+    }
+    return new Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _suitCard(Suit.HEARTS),
+            _suitCard(Suit.CLUBS),
+          ],
+        ),
+        new Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _suitCard(Suit.SPADES),
+            _suitCard(Suit.DIAMONDS),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _suitCard(Suit suit) {
+    return new GestureDetector(
+      onTap: () => _onSuitPicked(suit),
+      child: new Card(
+        child: new Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SuitWidget(suit: suit, height: 64.0, width: 64.0),
+        ),
+      ),
+    );
   }
 
   Widget ranks() {
@@ -124,7 +204,7 @@ class _CardViewState extends State<CardView> {
     return new GestureDetector(
       onTap: () {
         if (widget.enabled) {
-          widget?.onRankPicked(rank);
+          //widget?.onCardPicked(rank);
           setState(() {
             this.rank = rank;
           });
@@ -138,5 +218,12 @@ class _CardViewState extends State<CardView> {
         ),
       ),
     );
+  }
+
+  _onSuitPicked(Suit suit) {
+    setState(() {
+      this.suit = suit;
+    });
+    widget?.onCardPicked(new PlayingCard(this.rank, suit));
   }
 }
