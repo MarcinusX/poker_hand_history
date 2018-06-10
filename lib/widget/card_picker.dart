@@ -44,8 +44,7 @@ class _CardPickerState extends State<CardPicker>
 //      backgroundColor: Colors.green[400],
       body: new AnimatedBuilder(
         animation: _animationController,
-        builder: (context, child) =>
-            Stack(
+        builder: (context, child) => Stack(
               children: _buildStackChildren(),
             ),
       ),
@@ -87,9 +86,7 @@ class _CardPickerState extends State<CardPicker>
   Widget _confirmButton() {
     bool enabled = this.leftCard != null && this.rightCard != null;
     return new FloatingActionButton(
-      backgroundColor: enabled ? Theme
-          .of(context)
-          .accentColor : Colors.grey,
+      backgroundColor: enabled ? Theme.of(context).accentColor : Colors.grey,
       onPressed: enabled ? _onAccept : null,
       child: new Icon(Icons.check),
       mini: !enabled,
@@ -169,14 +166,13 @@ class _CardPickerState extends State<CardPicker>
     });
   }
 
-
   _onAccept() {
-    num stack = int.tryParse(_stackController.value.text) ?? widget
-        .initialStack;
+    num stack =
+        num.tryParse(_stackController.value.text) ?? widget.initialStack;
     Navigator.of(context).pop(new Hand(
-      this.leftCard,
-      this.rightCard,
-      stack,
-    ));
+          this.leftCard,
+          this.rightCard,
+          stack,
+        ));
   }
 }

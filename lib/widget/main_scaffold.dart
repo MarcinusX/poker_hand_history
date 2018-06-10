@@ -128,7 +128,7 @@ class MainScaffoldState extends State<MainScaffold> {
         .push(new MaterialPageRoute<Hand>(
           builder: (context) {
             return new CardPicker(
-              initialStack: hands.last?.stack,
+              initialStack: hands.isEmpty ? 0.0 : hands.last.stack,
             );
           },
           fullscreenDialog: true,
