@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:poker_hand_history/card.dart';
+import 'package:poker_hand_history/model/card.dart';
 
 class SuitWidget extends StatelessWidget {
   final Suit suit;
-  final double height;
-  final double width;
+  final double size;
 
   const SuitWidget({
     Key key,
     this.suit,
-    this.height,
-    this.width,
+    this.size,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return new Image.asset(
       _getAssetName(suit),
-      height: height,
-      width: width,
+      height: size,
+      width: size,
     );
   }
 

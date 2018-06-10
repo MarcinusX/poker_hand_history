@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:poker_hand_history/card.dart';
-import 'package:poker_hand_history/card_view.dart';
-import 'package:poker_hand_history/hand.dart';
+import 'package:poker_hand_history/model/card.dart';
+import 'package:poker_hand_history/model/hand.dart';
+import 'package:poker_hand_history/widget/card_view.dart';
 
 class CardPicker extends StatefulWidget {
   final num initialStack;
@@ -14,6 +14,7 @@ class CardPicker extends StatefulWidget {
 
 class _CardPickerState extends State<CardPicker>
     with SingleTickerProviderStateMixin {
+  TextEditingController _stackController = new TextEditingController();
   AnimationController _animationController;
   PlayingCard leftCard;
   PlayingCard rightCard;
@@ -31,11 +32,13 @@ class _CardPickerState extends State<CardPicker>
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-//        elevation: 0.0,
-//        textTheme: Theme.of(context).primaryTextTheme,
-//        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
+        iconTheme: new IconThemeData(color: Colors.black),
+        backgroundColor: Colors.transparent,
         title: new Text(
           "Add a hand",
+          style: new TextStyle(color: Colors.black),
         ),
       ),
 //      backgroundColor: Colors.green[400],
@@ -65,30 +68,32 @@ class _CardPickerState extends State<CardPicker>
                 enabled: this.leftCard != null && this.rightCard != null,
                 decoration: new InputDecoration(
                   helperText: "Stack after the hand",
-                  hintText: "8000",
+                  hintText: "${widget.initialStack}",
                 ),
+                controller: _stackController,
               ),
             ),
             new Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: new RaisedButton(
-                color: Theme
-                    .of(context)
-                    .accentColor,
-                shape: new BeveledRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                ),
-                onPressed: this.leftCard != null && this.rightCard != null
-                    ? _onAccept
-                    : null,
-                child: new Text("ADD"),
-              ),
+              padding: const EdgeInsets.only(bottom: 16.0),
+              child: _confirmButton(),
             ),
           ],
         ),
       ),
     );
     return children;
+  }
+
+  Widget _confirmButton() {
+    bool enabled = this.leftCard != null && this.rightCard != null;
+    return new FloatingActionButton(
+      backgroundColor: enabled ? Theme
+          .of(context)
+          .accentColor : Colors.grey,
+      onPressed: enabled ? _onAccept : null,
+      child: new Icon(Icons.check),
+      mini: !enabled,
+    );
   }
 
   List<Widget> _buildCardViews() {
@@ -164,11 +169,14 @@ class _CardPickerState extends State<CardPicker>
     });
   }
 
+
   _onAccept() {
+    num stack = int.tryParse(_stackController.value.text) ?? widget
+        .initialStack;
     Navigator.of(context).pop(new Hand(
       this.leftCard,
       this.rightCard,
-      widget.initialStack,
+      stack,
     ));
   }
 }

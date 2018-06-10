@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:poker_hand_history/card.dart';
-import 'package:poker_hand_history/suit_widget.dart';
+import 'package:poker_hand_history/model/card.dart';
+import 'package:poker_hand_history/widget/suit_widget.dart';
 
 class CardView extends StatefulWidget {
   final Function onTap;
@@ -32,7 +32,7 @@ class _CardViewState extends State<CardView> {
       child: Container(
         child: _buildBody(),
         decoration: new BoxDecoration(
-          color: const Color(0xFFFFFFCC),
+          color: const Color(0xFFFFFFF0),
           borderRadius: new BorderRadius.circular(16.0),
           border: new Border.all(
             color: const Color(0xFFEEEECC),
@@ -70,10 +70,6 @@ class _CardViewState extends State<CardView> {
   Widget _chosenCard() {
     Widget rankWidget = new Container();
     Widget suitWidget = new Container();
-    Color color = (this.suit != null &&
-        (this.suit == Suit.HEARTS || this.suit == Suit.DIAMONDS))
-        ? Colors.red
-        : Colors.black;
     if (this.rank != null) {
       rankWidget = new Text(
         rankToSymbol(rank),
@@ -81,14 +77,13 @@ class _CardViewState extends State<CardView> {
             .of(context)
             .textTheme
             .display2
-            .copyWith(color: color),
+            .copyWith(color: suitToColor(this.suit)),
       );
     }
     if (this.suit != null) {
       suitWidget = new SuitWidget(
         suit: this.suit,
-        height: 26.0,
-        width: 26.0,
+        size: 26.0,
       );
     }
 
@@ -134,7 +129,7 @@ class _CardViewState extends State<CardView> {
       child: new Card(
         child: new Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SuitWidget(suit: suit, height: 64.0, width: 64.0),
+          child: SuitWidget(suit: suit, size: 64.0),
         ),
       ),
     );
