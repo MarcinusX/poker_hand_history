@@ -72,6 +72,7 @@ class MainScaffoldState extends State<MainScaffold> {
             ),
           ),
           appBar: new AppBar(
+            key: new Key("app_bar"),
             title: new Text(
               "Hands from today",
               style: new TextStyle(color: Colors.black),
@@ -94,31 +95,12 @@ class MainScaffoldState extends State<MainScaffold> {
   ListView _buildScaffoldBody() {
     return new ListView.builder(
       itemBuilder: (context, index) {
-//        if (index == 0) {
-//          return _buildHandsHeader();
-//        } else {
         return new HandRow(
           hand: hands[index],
         );
 //        }
       },
       itemCount: hands.length,
-    );
-  }
-
-  Widget _buildHandsHeader() {
-    return new Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: new Center(
-        child: new Text(
-          "Hands from today:",
-          style: Theme
-              .of(context)
-              .textTheme
-              .display1
-              .copyWith(color: Colors.black),
-        ),
-      ),
     );
   }
 
