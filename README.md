@@ -1,6 +1,7 @@
-# poker_hand_history
+# Poker Hand history [![Build Status](https://travis-ci.org/MarcinusX/poker_hand_history.svg?branch=master)](https://travis-ci.org/MarcinusX/poker_hand_history)
 
-A new Flutter project.
+
+Simple application for storing poker hands history during a session.
 
 ## Getting Started
 
